@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HangmanQuest", "HangmanQues
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HangmanQuestTests", "HangmanQuestTests\HangmanQuestTests.vcxproj", "{D72D1471-1FD3-4FD4-8CCD-71951EFADD59}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF7A0842-5A77-42C3-925C-46B515333B28}"
+	ProjectSection(SolutionItems) = preProject
+		3of6game.txt = 3of6game.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

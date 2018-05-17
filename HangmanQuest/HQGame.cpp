@@ -8,8 +8,43 @@ HQGame::~HQGame()
 {
 }
 
+/*
+Set a random word from the 3of6game word list as the word to be guessed.
+*/
 void HQGame::fetchNewWord()
 {
+	std::ifstream wordlist("../3of6game.txt");
+
+	std::vector<std::string> words;
+
+	if (wordlist.is_open())
+	{
+		std::string line;
+
+		while (std::getline(wordlist, line)) 
+		{
+			// Remove non-alphabetical characters.
+			int i = 0;
+			for (char letter : line)
+			{
+				if (!std::isalpha(letter))
+				{
+					line.erase(i);
+				}
+				++i;
+			}
+
+			// Add fixed word to words.
+			words.push_back(line);
+		}
+	}
+
+	wordlist.close();
+
+	// Choose a random word.
+	std::srand(time(NULL));
+	std::random_shuffle(words.begin(), words.end());
+	word = words.front();
 }
 
 /*
@@ -43,7 +78,7 @@ int HQGame::guess(char letter)
 	}
 }
 
-int HQGame::getWordLength() const
+size_t HQGame::getWordLength() const
 {
 	return word.size();
 }
