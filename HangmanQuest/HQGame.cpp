@@ -1,12 +1,5 @@
 #include "HQGame.h"
 
-enum LetterFlags
-{
-	IN = 1,
-	NOT_IN = 2,
-	INVALID = 3
-};
-
 HQGame::HQGame()
 {
 }
@@ -23,30 +16,30 @@ void HQGame::fetchNewWord()
 Guesses if a letter is in the word.
 
 Returns:
-  IN : Letter is in word.
-  NOT_IN : Letter is not in word.
-  INVALID : Letter has already been guessed.
+  0 = IN : Letter is in word.
+  1 = NOT_IN : Letter is not in word.
+  2 = INVALID : Letter has already been guessed.
 */
-bool HQGame::guess(char letter)
+int HQGame::guess(char letter)
 {
 	// Check if the letter has been guessed already.
 	if (misses.count(letter) > 0)
 	{
-		return INVALID;
+		return 2;
 	}
 	if (hits.count(letter) > 0)
 	{
-		return INVALID;
+		return 2;
 	}
 
 	// Check if the letter is in the word.
 	if (letters.count(letter) > 0)
 	{
 		hits.insert(letter);
-		return IN;
+		return 0;
 	} else {
 		misses.insert(letter);
-		return NOT_IN;
+		return 1;
 	}
 }
 

@@ -16,7 +16,7 @@ public:
 	~HQGame();
 
 	void fetchNewWord(); // Fetches new word from 3of6game database.
-	bool guess(char letter); // Guess that a letter is in a word.
+	int guess(char letter); // Guess that a letter is in a word.
 
 	int getWordLength() const; // Return number of letters in the word.
 	std::string getWord() const; // Return word.
