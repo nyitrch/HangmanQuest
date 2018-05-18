@@ -14,13 +14,16 @@ private:
 		MAIN_MENU,
 		ENTER_WORD,
 		GAME,
-		HELP
+		HELP,
+		WIN,
+		LOSE
 	};
 
 	std::vector<sf::IntRect> alpha_buttons;
 	sf::Font font;
-	sf::Text empty_word;
+	sf::Text debug_word;
 	sf::Text guessed_word;
+	std::vector<sf::Text> missed_letters;
 	GameState game_state;
 
 public:
@@ -30,9 +33,13 @@ public:
 	void setController(HQController * controller);
 
 	int initialize();
-	void update(std::string word);
+	int update();
+
+	void drawMisses(sf::RenderWindow * window);
 
 	char getLetter(sf::Vector2i);
 	int renderGame();
+
+
 };
 

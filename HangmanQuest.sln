@@ -18,7 +18,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Overlays", "Overlays", "{CE
 		Overlays\enter_word.png = Overlays\enter_word.png
 		Overlays\game.png = Overlays\game.png
 		Overlays\help.png = Overlays\help.png
+		Overlays\hm0.png = Overlays\hm0.png
+		Overlays\hm1.png = Overlays\hm1.png
+		Overlays\hm2.png = Overlays\hm2.png
+		Overlays\hm3.png = Overlays\hm3.png
+		Overlays\hm4.png = Overlays\hm4.png
+		Overlays\hm5.png = Overlays\hm5.png
+		Overlays\hm6.png = Overlays\hm6.png
+		Overlays\lose.png = Overlays\lose.png
 		Overlays\menu.png = Overlays\menu.png
+		Overlays\win.png = Overlays\win.png
 	EndProjectSection
 EndProject
 Global

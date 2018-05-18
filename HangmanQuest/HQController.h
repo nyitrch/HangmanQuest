@@ -11,11 +11,12 @@ private:
 	HQGame * model;
 	HQView * view;
 public:
-	HQController(HQGame * model);
+	HQController(HQGame * model, HQView * view);
 	~HQController();
 
 	// Model -> View methods.
 	std::string getWord();
+	size_t getWordLength();
 	std::set<char> getHits();
 	std::set<char> getMisses();
 

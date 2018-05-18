@@ -6,9 +6,9 @@
 
 HQView::HQView()
 {
+	game_state = MAIN_MENU;
 	initialize();
 }
-
 
 HQView::~HQView()
 {
@@ -21,20 +21,18 @@ void HQView::setController(HQController * controller)
 
 int HQView::initialize()
 {
-	// Set state to main menu.
-	game_state = MAIN_MENU;
-
 	// Initialize font.
 	if (!font.loadFromFile("../arlrdbd.ttf"))
 		return -1;
 
 	// Initialize guessed word.
 	guessed_word.setFont(font);
-	guessed_word.setCharacterSize(80);
+	guessed_word.setCharacterSize(50);
 
-	// Initialize empty guessed word.
-	empty_word.setFont(font);
-	empty_word.setCharacterSize(80);
+	debug_word.setFont(font);
+	debug_word.setCharacterSize(50);
+
+	missed_letters.clear();
 
 	// Create alphabet buttons.
 	sf::IntRect a_button(35, 582, 43, 49);
@@ -93,23 +91,76 @@ int HQView::initialize()
 	return 0;
 }
 
-void HQView::update(std::string word)
+int HQView::update()
 {
+	std::string word = controller->getWord();
+	std::set<char> hits = controller->getHits();
+	std::set<char> misses = controller->getMisses();
+
+	if (misses.size() == 6)
+	{
+		// you lose.
+		game_state = LOSE;
+	}
+
+	if (hits.size() == controller->getWordLength())
+	{
+		// you win.
+		game_state = WIN;
+	}
+
+	// Render misses on keyboard.
+	missed_letters.clear();
+	for (char letter : misses)
+	{
+		// Render misses on keyboard.
+		int i = static_cast<int>(letter);
+		sf::Text missed_letter("X", font);
+		missed_letter.setFillColor(sf::Color::Red);
+		missed_letter.setPosition(alpha_buttons[i-65].left, alpha_buttons[i-65].top);
+		missed_letters.push_back(missed_letter);
+	}
+
 	// Create guessed word.
-	guessed_word.setString(word);
+	std::string partial_word;
+	for (char letter : word)
+	{
+		if (hits.count(letter) > 0)
+			partial_word += letter;
+
+		if (hits.count(letter) == 0)
+			partial_word += '_';
+	}
+
+	guessed_word.setString(partial_word);
 	guessed_word.setFillColor(sf::Color::White);
+	guessed_word.setLetterSpacing(5);
 	float guessed_word_width = guessed_word.getLocalBounds().width;
-	guessed_word.setPosition(300 - guessed_word_width / 2, 10);
+	guessed_word.setPosition(300 - guessed_word_width / 2, 0);
 
-	// Create empty word.
-	std::string empty_word_lines;
-	for (int i = 0; i < word.size(); ++i)
-		empty_word_lines += "_";
-	empty_word.setString(empty_word_lines);
-	empty_word.setFillColor(sf::Color::White);
-	empty_word.setLetterSpacing(5);
-	empty_word.setPosition(300 - guessed_word_width / 2, 0);
+	// debug word
+	debug_word.setString(word);
+	debug_word.setFillColor(sf::Color::Red);
+	debug_word.setPosition(300, 400);
 
+	return 0;
+}
+
+void HQView::drawMisses(sf::RenderWindow * window)
+{
+	for (sf::Text mark : missed_letters)
+	{
+		window->draw(mark);
+	}
+
+	sf::Texture hangman_texture;
+	std::string filename = "../Overlays/hm" + std::to_string(missed_letters.size()) + ".png";
+	if (hangman_texture.loadFromFile(filename))
+	{
+		sf::Sprite hangman;
+		hangman.setTexture(hangman_texture);
+		window->draw(hangman);
+	}
 }
 
 char HQView::getLetter(sf::Vector2i position)
@@ -173,6 +224,18 @@ int HQView::renderGame()
 	sf::Sprite help_overlay;
 	help_overlay.setTexture(help_overlay_texture);
 
+	// Create win and loss overlays.
+	sf::Texture win_overlay_texture;
+	sf::Texture lose_overlay_texture;
+	if (!win_overlay_texture.loadFromFile("../Overlays/win.png"))
+		return -1;
+	if (!lose_overlay_texture.loadFromFile("../Overlays/lose.png"))
+		return -1;
+	sf::Sprite win_overlay;
+	sf::Sprite lose_overlay;
+	win_overlay.setTexture(win_overlay_texture);
+	lose_overlay.setTexture(lose_overlay_texture);
+
 	// Create menu buttons.
 	sf::IntRect enter_word_button(149, 551, 301, 105);
 	sf::IntRect choose_for_me_button(130, 421, 340, 105);
@@ -204,17 +267,23 @@ int HQView::renderGame()
 			switch (game_state)
 			{
 			case MAIN_MENU:
+				initialize();
 				// Check button presses.
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				if (event.type == sf::Event::MouseButtonReleased)
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
-	
 					if (enter_word_button.contains(position)) // user will enter word
+					{
 						game_state = ENTER_WORD;
-
+						break;
+					}
 					if (choose_for_me_button.contains(position)) // choose word for user.
+					{
 						game_state = GAME;
 						// tell controller to choose word.
+						controller->chooseForMe();
+						break;
+					}
 				}
 				break;
 
@@ -244,18 +313,27 @@ int HQView::renderGame()
 				}
 
 				// Check if the confirm button was pressed.
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				if (event.type == sf::Event::MouseButtonReleased)
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (confirm_button.contains(position)) // confirm entered word.
+					{
 						game_state = GAME;
-						// send entered word to controller.
-				}
 
+						// send entered word to controller.
+						controller->setWord(input);
+
+						// Reset the textbox.
+						input.clear();
+						entered_text.setString(input);
+						break;
+					}
+				}
 				break;
+
 			case GAME:
 				// Check if a button was pressed.
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				if (event.type == sf::Event::MouseButtonReleased)
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 
@@ -271,30 +349,56 @@ int HQView::renderGame()
 						break;
 					}
 
-					char guess = getLetter(position);
+					char letter = getLetter(position);
 					// If there was a guess, send guess to controller.
-					if (guess != ' ')
+					if (letter != ' ')
 					{
-
+						controller->guess(letter);
+						break;
 					}
-
 				}
 				break;
+
 			case HELP:
 				// Check if back button was pressed.
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				if (event.type == sf::Event::MouseButtonReleased)
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (back_button.contains(position))
 						game_state = GAME;
 				}
 				break;
+
+			case WIN:
+				// Check if back button was pressed.
+				if (event.type == sf::Event::MouseButtonReleased)
+				{
+					sf::Vector2i position = sf::Mouse::getPosition(window);
+					if (back_button.contains(position))
+						game_state = MAIN_MENU;
+				}
+				break;
+
+
+			case LOSE:
+				// Check if back button was pressed.
+				if (event.type == sf::Event::MouseButtonReleased)
+				{
+					sf::Vector2i position = sf::Mouse::getPosition(window);
+					if (back_button.contains(position))
+						game_state = MAIN_MENU;
+				}
+				break;
+
 			}
 
 		}
 
 		window.clear();
 		window.draw(background);
+
+		sf::Texture test;
+		sf::Sprite test_sprite;
 
 		// Render switch depending on game state.
 		switch (game_state)
@@ -310,16 +414,30 @@ int HQView::renderGame()
 			break;
 		case GAME:
 			window.draw(game_overlay);
-			window.draw(empty_word);
 			window.draw(guessed_word);
+			window.draw(debug_word);
+			drawMisses(&window);
 			break;
 		case HELP:
 			window.draw(game_overlay);
-			window.draw(empty_word);
 			window.draw(guessed_word);
+			drawMisses(&window);
 			window.draw(help_overlay);
+			break;
+		case WIN:
+			window.draw(game_overlay);
+			window.draw(guessed_word);
+			drawMisses(&window);
+			window.draw(win_overlay);
+			break;
+		case LOSE:
+			window.draw(game_overlay);
+			window.draw(guessed_word);
+			drawMisses(&window);
+			window.draw(lose_overlay);
 			break;
 		}
 		window.display();
 	}
+	return 0;
 }

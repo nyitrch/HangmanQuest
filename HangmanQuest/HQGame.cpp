@@ -22,7 +22,6 @@ Set a random word from the 3of6game word list as the word to be guessed.
 void HQGame::fetchNewWord()
 {
 	std::ifstream wordlist("../3of6game.txt");
-
 	std::vector<std::string> words;
 
 	if (wordlist.is_open())
@@ -41,7 +40,6 @@ void HQGame::fetchNewWord()
 				}
 				++i;
 			}
-
 			// Add fixed word to words.
 			words.push_back(line);
 		}
@@ -50,11 +48,9 @@ void HQGame::fetchNewWord()
 	wordlist.close();
 
 	// Choose a random word.
-	std::srand(time(NULL));
+	std::srand(static_cast<unsigned int>(time(NULL)));
 	std::random_shuffle(words.begin(), words.end());
-	word = words.front();
-
-	// update view.
+	setWord(words.front());
 }
 
 /*
@@ -90,7 +86,7 @@ int HQGame::guess(char letter)
 
 size_t HQGame::getWordLength() const
 {
-	return word.size();
+	return letters.size();
 }
 
 std::string HQGame::getWord() const
@@ -99,7 +95,7 @@ std::string HQGame::getWord() const
 }
 
 /*
-Initializes the gamestate with a word given by the user.
+Initializes the gamestate with a word.
 */
 void HQGame::setWord(std::string new_word)
 {

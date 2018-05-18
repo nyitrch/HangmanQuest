@@ -8,7 +8,7 @@ int main()
 {
 	HQGame * hqgame = new HQGame();
 	HQView * hqview = new HQView();
-	HQController hqcontroller(hqgame);
+	HQController hqcontroller(hqgame, hqview);
 
 	hqview->setController(&hqcontroller);
 
