@@ -8,7 +8,7 @@ int main()
 	HQGame hqgame;
 	HQView hqview;
 
-	hqview.displayGame();
+	hqview.renderGame();
 
 	return 0;
 }

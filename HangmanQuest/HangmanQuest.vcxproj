@@ -159,10 +159,12 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="HQController.cpp" />
     <ClCompile Include="HQGame.cpp" />
     <ClCompile Include="HQView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HQController.h" />
     <ClInclude Include="HQGame.h" />
     <ClInclude Include="HQView.h" />
     <ClInclude Include="resource.h" />

@@ -1,8 +1,34 @@
 #include "HQView.h"
 
+
+
 HQView::HQView()
 {
+	initialize();
+}
+
+
+HQView::~HQView()
+{
+}
+
+int HQView::initialize()
+{
+	// Set state to main menu.
 	game_state = MAIN_MENU;
+
+	// Initialize font.
+	if (!font.loadFromFile("../arlrdbd.ttf"))
+		return -1;
+
+	// Initialize guessed word.
+	guessed_word.setFont(font);
+	guessed_word.setCharacterSize(80);
+
+	// Initialize empty guessed word.
+	empty_word.setFont(font);
+	empty_word.setCharacterSize(80);
+
 	// Create alphabet buttons.
 	sf::IntRect a_button(35, 582, 43, 49);
 	sf::IntRect b_button(91, 582, 43, 49);
@@ -56,11 +82,27 @@ HQView::HQView()
 	alpha_buttons.push_back(x_button);
 	alpha_buttons.push_back(y_button);
 	alpha_buttons.push_back(z_button);
+
+	return 0;
 }
 
-
-HQView::~HQView()
+void HQView::update(std::string word)
 {
+	// Create guessed word.
+	guessed_word.setString(word);
+	guessed_word.setFillColor(sf::Color::White);
+	float guessed_word_width = guessed_word.getLocalBounds().width;
+	guessed_word.setPosition(300 - guessed_word_width / 2, 10);
+
+	// Create empty word.
+	std::string empty_word_lines;
+	for (int i = 0; i < word.size(); ++i)
+		empty_word_lines += "_";
+	empty_word.setString(empty_word_lines);
+	empty_word.setFillColor(sf::Color::White);
+	empty_word.setLetterSpacing(5);
+	empty_word.setPosition(300 - guessed_word_width / 2, 0);
+
 }
 
 char HQView::getLetter(sf::Vector2i position)
@@ -76,7 +118,7 @@ char HQView::getLetter(sf::Vector2i position)
 /*
 Renders the game screen (the current state of the game).
 */
-int HQView::displayGame()
+int HQView::renderGame()
 {
 	// Create window.
 	sf::RenderWindow window(sf::VideoMode(600, 800), "HangmanQuest", sf::Style::Close);
@@ -87,11 +129,6 @@ int HQView::displayGame()
 	sf::RectangleShape background(sf::Vector2f(600, 800));
 	background.setFillColor(sf::Color(42, 212, 255, 255));
 
-	// Create font.
-	sf::Font font;
-	if (!font.loadFromFile("../arlrdbd.ttf"))
-		return -1;
-
 	// Create title.
 	sf::Text title;
 	title.setFont(font);
@@ -100,14 +137,6 @@ int HQView::displayGame()
 	title.setFillColor(sf::Color::White);
 	float title_width = title.getLocalBounds().width;
 	title.setPosition(300 - title_width / 2, 180);
-
-	// Create empty word to guess.
-	sf::Text empty_word;
-	empty_word.setFont(font);
-	empty_word.setCharacterSize(56);
-	empty_word.setFillColor(sf::Color::White);
-	float empty_word_width = empty_word.getLocalBounds().width;
-	empty_word.setPosition(300 - empty_word_width / 2, 180);
 
 	// Create menu overlay.
 	sf::Texture menu_overlay_texture;
@@ -139,7 +168,7 @@ int HQView::displayGame()
 
 	// Create menu buttons.
 	sf::IntRect enter_word_button(149, 551, 301, 105);
-	sf::IntRect choose_word_button(130, 421, 340, 105);
+	sf::IntRect choose_for_me_button(130, 421, 340, 105);
 
 	// Other game buttons.
 	sf::IntRect back_button(29, 725, 55, 56);
@@ -176,7 +205,7 @@ int HQView::displayGame()
 					if (enter_word_button.contains(position)) // user will enter word
 						game_state = ENTER_WORD;
 
-					if (choose_word_button.contains(position)) // choose word for user.
+					if (choose_for_me_button.contains(position)) // choose word for user.
 						game_state = GAME;
 						// tell controller to choose word.
 				}
@@ -207,18 +236,18 @@ int HQView::displayGame()
 					}
 				}
 
-				// Check confirm button press.
+				// Check if the confirm button was pressed.
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (confirm_button.contains(position)) // confirm entered word.
 						game_state = GAME;
-						// send word to controller.
+						// send entered word to controller.
 				}
 
 				break;
 			case GAME:
-				// Get if a button was pressed.
+				// Check if a button was pressed.
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
@@ -226,9 +255,10 @@ int HQView::displayGame()
 					if (back_button.contains(position)) // return to menu.
 					{
 						game_state = MAIN_MENU;
+						// tell controller to reset game.
 						break;
 					}
-					if (help_button.contains(position))
+					if (help_button.contains(position)) // display help
 					{
 						game_state = HELP;
 						break;
@@ -273,9 +303,13 @@ int HQView::displayGame()
 			break;
 		case GAME:
 			window.draw(game_overlay);
+			window.draw(empty_word);
+			window.draw(guessed_word);
 			break;
 		case HELP:
 			window.draw(game_overlay);
+			window.draw(empty_word);
+			window.draw(guessed_word);
 			window.draw(help_overlay);
 			break;
 		}

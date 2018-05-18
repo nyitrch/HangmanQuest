@@ -14,15 +14,19 @@ private:
 	};
 
 	std::vector<sf::IntRect> alpha_buttons;
+	sf::Font font;
+	sf::Text empty_word;
+	sf::Text guessed_word;
 	GameState game_state;
 
 public:
 	HQView();
 	~HQView();
 
-	void update();
+	int initialize();
+	void update(std::string);
 
 	char getLetter(sf::Vector2i);
-	int displayGame();
+	int renderGame();
 };
 
