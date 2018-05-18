@@ -50,7 +50,15 @@ void HQGame::fetchNewWord()
 	// Choose a random word.
 	std::srand(static_cast<unsigned int>(time(NULL)));
 	std::random_shuffle(words.begin(), words.end());
-	setWord(words.front());
+	
+	word = words.front();
+
+	/*
+	Convert to uppercase. Taken from https://stackoverflow.com/questions/23418390/how-to-convert-a-c-string-to-uppercase on May 18, 2018.
+	*/
+	std::transform(word.begin(), word.end(), word.begin(), ::toupper);
+
+	setWord(word);
 }
 
 /*

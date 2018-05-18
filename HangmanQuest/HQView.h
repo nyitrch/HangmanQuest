@@ -21,7 +21,6 @@ private:
 
 	std::vector<sf::IntRect> alpha_buttons;
 	sf::Font font;
-	sf::Text debug_word;
 	sf::Text guessed_word;
 	std::vector<sf::Text> missed_letters;
 	GameState game_state;

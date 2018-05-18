@@ -29,9 +29,6 @@ int HQView::initialize()
 	guessed_word.setFont(font);
 	guessed_word.setCharacterSize(50);
 
-	debug_word.setFont(font);
-	debug_word.setCharacterSize(50);
-
 	missed_letters.clear();
 
 	// Create alphabet buttons.
@@ -136,12 +133,14 @@ int HQView::update()
 	guessed_word.setFillColor(sf::Color::White);
 	guessed_word.setLetterSpacing(5);
 	float guessed_word_width = guessed_word.getLocalBounds().width;
-	guessed_word.setPosition(300 - guessed_word_width / 2, 0);
-
-	// debug word
-	debug_word.setString(word);
-	debug_word.setFillColor(sf::Color::Red);
-	debug_word.setPosition(300, 400);
+	int i = 0;
+	while (guessed_word_width > 580)
+	{
+		guessed_word.setCharacterSize(guessed_word.getCharacterSize() - 1);
+		guessed_word_width = guessed_word.getLocalBounds().width;
+		++i;
+	}
+	guessed_word.setPosition(300 - guessed_word_width / 2, i);
 
 	return 0;
 }
@@ -379,8 +378,20 @@ int HQView::renderGame()
 				}
 				break;
 
-
 			case LOSE:
+
+				// Display the whole word.
+				guessed_word.setString(controller->getWord());
+				float guessed_word_width = guessed_word.getLocalBounds().width;
+				int i = 0;
+				while (guessed_word_width > 580)
+				{
+					guessed_word.setCharacterSize(guessed_word.getCharacterSize() - 1);
+					guessed_word_width = guessed_word.getLocalBounds().width;
+					++i;
+				}
+				guessed_word.setPosition(300 - guessed_word_width / 2, i);
+
 				// Check if back button was pressed.
 				if (event.type == sf::Event::MouseButtonReleased)
 				{
@@ -389,16 +400,11 @@ int HQView::renderGame()
 						game_state = MAIN_MENU;
 				}
 				break;
-
 			}
-
 		}
 
 		window.clear();
 		window.draw(background);
-
-		sf::Texture test;
-		sf::Sprite test_sprite;
 
 		// Render switch depending on game state.
 		switch (game_state)
@@ -415,7 +421,6 @@ int HQView::renderGame()
 		case GAME:
 			window.draw(game_overlay);
 			window.draw(guessed_word);
-			window.draw(debug_word);
 			drawMisses(&window);
 			break;
 		case HELP:
@@ -426,15 +431,15 @@ int HQView::renderGame()
 			break;
 		case WIN:
 			window.draw(game_overlay);
-			window.draw(guessed_word);
 			drawMisses(&window);
 			window.draw(win_overlay);
+			window.draw(guessed_word);
 			break;
 		case LOSE:
 			window.draw(game_overlay);
-			window.draw(guessed_word);
 			drawMisses(&window);
 			window.draw(lose_overlay);
+			window.draw(guessed_word);
 			break;
 		}
 		window.display();
