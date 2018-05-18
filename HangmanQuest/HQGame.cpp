@@ -106,3 +106,13 @@ void HQGame::setWord(std::string new_word)
 		letters.insert(letter);
 	}
 }
+
+std::set<char> HQGame::getMisses()
+{
+	return misses;
+}
+
+std::set<char> HQGame::getHits()
+{
+	return hits;
+}

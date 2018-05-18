@@ -159,9 +159,18 @@
       </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="HQGame.cpp" />
+    <ClCompile Include="HQView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HQGame.h" />
+    <ClInclude Include="HQView.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HangmanQuest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Overlays\menu.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
