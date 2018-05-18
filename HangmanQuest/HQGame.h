@@ -1,12 +1,6 @@
 #pragma once
-#include <string>
-#include <vector>
 #include <set>
-#include <cctype>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <time.h>
+#include <string>
 
 class HQGame
 {

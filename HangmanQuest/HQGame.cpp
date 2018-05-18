@@ -1,4 +1,12 @@
 #include "HQGame.h"
+#include <vector>
+#include <cctype>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <time.h>
+
+
 
 HQGame::HQGame()
 {
@@ -45,6 +53,8 @@ void HQGame::fetchNewWord()
 	std::srand(time(NULL));
 	std::random_shuffle(words.begin(), words.end());
 	word = words.front();
+
+	// update view.
 }
 
 /*

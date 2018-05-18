@@ -1,4 +1,6 @@
 #include "HQView.h"
+#include "HQController.h"
+#include "HQGame.h"
 
 
 
@@ -10,6 +12,11 @@ HQView::HQView()
 
 HQView::~HQView()
 {
+}
+
+void HQView::setController(HQController * controller)
+{
+	this->controller = controller;
 }
 
 int HQView::initialize()
