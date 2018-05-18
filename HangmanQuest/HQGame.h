@@ -22,11 +22,11 @@ public:
 	~HQGame();
 
 	void fetchNewWord(); // Fetches new word from 3of6game database.
-	int guess(char letter); // Guess that a letter is in a word.
+	int guess(char); // Guess that a letter is in a word.
 
 	size_t getWordLength() const; // Return number of letters in the word.
 	std::string getWord() const; // Return word.
-	void setWord(std::string new_word); // Initializes gamestate with a word from the user.
+	void setWord(std::string); // Initializes gamestate with a word from the user.
 
 	std::set<char> getMisses(); // Returns misses.
 	std::set<char> getHits(); // Returns hits.

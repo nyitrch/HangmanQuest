@@ -1,14 +1,76 @@
 #include "HQView.h"
-#include <SFML/Graphics.hpp>
 
 HQView::HQView()
 {
 	game_state = MAIN_MENU;
+	// Create alphabet buttons.
+	sf::IntRect a_button(35, 582, 43, 49);
+	sf::IntRect b_button(91, 582, 43, 49);
+	sf::IntRect c_button(149, 582, 43, 49);
+	sf::IntRect d_button(207, 582, 43, 49);
+	sf::IntRect e_button(263, 582, 43, 49);
+	sf::IntRect f_button(315, 582, 43, 49);
+	sf::IntRect g_button(371, 582, 43, 49);
+	sf::IntRect h_button(431, 582, 43, 49);
+	sf::IntRect i_button(477, 582, 43, 49);
+	sf::IntRect j_button(523, 582, 43, 49);
+	sf::IntRect k_button(47, 656, 43, 49);
+	sf::IntRect l_button(103, 656, 43, 49);
+	sf::IntRect m_button(158, 656, 43, 49);
+	sf::IntRect n_button(220, 656, 43, 49);
+	sf::IntRect o_button(280, 656, 43, 49);
+	sf::IntRect p_button(338, 656, 43, 49);
+	sf::IntRect q_button(396, 656, 43, 49);
+	sf::IntRect r_button(454, 656, 43, 49);
+	sf::IntRect s_button(509, 656, 43, 49);
+	sf::IntRect t_button(110, 729, 43, 49);
+	sf::IntRect u_button(164, 729, 43, 49);
+	sf::IntRect v_button(222, 729, 43, 49);
+	sf::IntRect w_button(278, 729, 55, 49);
+	sf::IntRect x_button(344, 729, 43, 49);
+	sf::IntRect y_button(394, 729, 43, 49);
+	sf::IntRect z_button(447, 729, 43, 49);
+	alpha_buttons.push_back(a_button);
+	alpha_buttons.push_back(b_button);
+	alpha_buttons.push_back(c_button);
+	alpha_buttons.push_back(d_button);
+	alpha_buttons.push_back(e_button);
+	alpha_buttons.push_back(f_button);
+	alpha_buttons.push_back(g_button);
+	alpha_buttons.push_back(h_button);
+	alpha_buttons.push_back(i_button);
+	alpha_buttons.push_back(j_button);
+	alpha_buttons.push_back(k_button);
+	alpha_buttons.push_back(l_button);
+	alpha_buttons.push_back(m_button);
+	alpha_buttons.push_back(n_button);
+	alpha_buttons.push_back(o_button);
+	alpha_buttons.push_back(p_button);
+	alpha_buttons.push_back(q_button);
+	alpha_buttons.push_back(r_button);
+	alpha_buttons.push_back(s_button);
+	alpha_buttons.push_back(t_button);
+	alpha_buttons.push_back(u_button);
+	alpha_buttons.push_back(v_button);
+	alpha_buttons.push_back(w_button);
+	alpha_buttons.push_back(x_button);
+	alpha_buttons.push_back(y_button);
+	alpha_buttons.push_back(z_button);
 }
 
 
 HQView::~HQView()
 {
+}
+
+char HQView::getLetter(sf::Vector2i position)
+{
+	for (size_t i = 0; i < alpha_buttons.size(); ++i)
+	{
+		if (alpha_buttons[i].contains(position))
+			return static_cast<char>(i + 65);
+	}
+	return ' ';
 }
 
 /*
@@ -17,7 +79,7 @@ Renders the game screen (the current state of the game).
 int HQView::displayGame()
 {
 	// Create window.
-	sf::RenderWindow window(sf::VideoMode(600, 800), "HangmanQuest");
+	sf::RenderWindow window(sf::VideoMode(600, 800), "HangmanQuest", sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
@@ -38,6 +100,14 @@ int HQView::displayGame()
 	title.setFillColor(sf::Color::White);
 	float title_width = title.getLocalBounds().width;
 	title.setPosition(300 - title_width / 2, 180);
+
+	// Create empty word to guess.
+	sf::Text empty_word;
+	empty_word.setFont(font);
+	empty_word.setCharacterSize(56);
+	empty_word.setFillColor(sf::Color::White);
+	float empty_word_width = empty_word.getLocalBounds().width;
+	empty_word.setPosition(300 - empty_word_width / 2, 180);
 
 	// Create menu overlay.
 	sf::Texture menu_overlay_texture;
@@ -60,9 +130,20 @@ int HQView::displayGame()
 	sf::Sprite game_overlay;
 	game_overlay.setTexture(game_overlay_texture);
 
+	// Create help overlay.
+	sf::Texture help_overlay_texture;
+	if (!help_overlay_texture.loadFromFile("../Overlays/help.png"))
+		return -1;
+	sf::Sprite help_overlay;
+	help_overlay.setTexture(help_overlay_texture);
+
 	// Create menu buttons.
 	sf::IntRect enter_word_button(149, 551, 301, 105);
 	sf::IntRect choose_word_button(130, 421, 340, 105);
+
+	// Other game buttons.
+	sf::IntRect back_button(29, 725, 55, 56);
+	sf::IntRect help_button(518, 725, 56, 56);
 
 	// Create enter word button.
 	sf::IntRect confirm_button(189, 591, 221, 52);
@@ -137,8 +218,39 @@ int HQView::displayGame()
 
 				break;
 			case GAME:
+				// Get if a button was pressed.
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					sf::Vector2i position = sf::Mouse::getPosition(window);
+
+					if (back_button.contains(position)) // return to menu.
+					{
+						game_state = MAIN_MENU;
+						break;
+					}
+					if (help_button.contains(position))
+					{
+						game_state = HELP;
+						break;
+					}
+
+					char guess = getLetter(position);
+					// If there was a guess, send guess to controller.
+					if (guess != ' ')
+					{
+
+					}
+
+				}
 				break;
 			case HELP:
+				// Check if back button was pressed.
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					sf::Vector2i position = sf::Mouse::getPosition(window);
+					if (back_button.contains(position))
+						game_state = GAME;
+				}
 				break;
 			}
 
@@ -163,6 +275,8 @@ int HQView::displayGame()
 			window.draw(game_overlay);
 			break;
 		case HELP:
+			window.draw(game_overlay);
+			window.draw(help_overlay);
 			break;
 		}
 		window.display();

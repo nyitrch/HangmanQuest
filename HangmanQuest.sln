@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Overlays", "Overlays", "{CE
 	ProjectSection(SolutionItems) = preProject
 		Overlays\enter_word.png = Overlays\enter_word.png
 		Overlays\game.png = Overlays\game.png
+		Overlays\help.png = Overlays\help.png
 		Overlays\menu.png = Overlays\menu.png
 	EndProjectSection
 EndProject

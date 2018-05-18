@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <SFML/Graphics.hpp>
 class HQView
 {
 private:
@@ -11,6 +13,7 @@ private:
 		HELP
 	};
 
+	std::vector<sf::IntRect> alpha_buttons;
 	GameState game_state;
 
 public:
@@ -19,12 +22,7 @@ public:
 
 	void update();
 
-	void onGuessButtonPress();
-
+	char getLetter(sf::Vector2i);
 	int displayGame();
-	void displayWord();
-	void displayHangman();
-	void displayHits();
-	void displayMisses();
 };
 
