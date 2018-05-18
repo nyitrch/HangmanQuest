@@ -1,6 +1,18 @@
 #pragma once
 class HQView
 {
+private:
+
+	enum GameState
+	{
+		MAIN_MENU,
+		ENTER_WORD,
+		GAME,
+		HELP
+	};
+
+	GameState game_state;
+
 public:
 	HQView();
 	~HQView();
