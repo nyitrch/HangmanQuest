@@ -6,6 +6,6 @@ Uses the 3of6game word list from SCOWL (And Friends) 12dicts list at http://word
 To run:
 1. Clone repo.
 2. Navigate to Release folder.
-3. Run Hangman.exe.
+3. Run HangmanQuest.exe.
 
 Game is controlled by clicking and with the keyboard.
