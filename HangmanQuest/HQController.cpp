@@ -31,14 +31,6 @@ std::set<char> HQController::getMisses()
 	return model->getMisses();
 }
 
-
-void HQController::newGame()
-{
-	// Clear model.
-	model->setWord("");
-	view->update();
-}
-
 void HQController::guess(char letter)
 {
 	// Send guess to model.

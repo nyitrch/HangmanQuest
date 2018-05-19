@@ -19,6 +19,9 @@ void HQView::setController(HQController * controller)
 	this->controller = controller;
 }
 
+/*
+Initialize the game view. Creates the alphabet buttons, the word to guess, and the font. 
+*/
 int HQView::initialize()
 {
 	// Initialize font.
@@ -88,6 +91,9 @@ int HQView::initialize()
 	return 0;
 }
 
+/*
+Pulls information from the model and renders the new information appropriately.
+*/
 int HQView::update()
 {
 	std::string word = controller->getWord();
@@ -129,6 +135,7 @@ int HQView::update()
 			partial_word += '_';
 	}
 
+	// Resize the guessed word to fit on the screen.
 	guessed_word.setString(partial_word);
 	guessed_word.setFillColor(sf::Color::White);
 	guessed_word.setLetterSpacing(5);
@@ -145,14 +152,20 @@ int HQView::update()
 	return 0;
 }
 
+/*
+Draw the X marks that appear on incorrectly guessed letters, as well as the hangman.
+*/
 void HQView::drawMisses(sf::RenderWindow * window)
 {
+	// Draw x marks.
 	for (sf::Text mark : missed_letters)
 	{
 		window->draw(mark);
 	}
 
+	// Draw hangman.
 	sf::Texture hangman_texture;
+	// Variable filename to choose the right one from the 6 overlays.
 	std::string filename = "../Overlays/hm" + std::to_string(missed_letters.size()) + ".png";
 	if (hangman_texture.loadFromFile(filename))
 	{
@@ -162,6 +175,9 @@ void HQView::drawMisses(sf::RenderWindow * window)
 	}
 }
 
+/*
+Get the letter button that the cursor is in with some unicode magic. Checks every button.
+*/
 char HQView::getLetter(sf::Vector2i position)
 {
 	for (size_t i = 0; i < alpha_buttons.size(); ++i)
@@ -173,7 +189,10 @@ char HQView::getLetter(sf::Vector2i position)
 }
 
 /*
-Renders the game screen (the current state of the game).
+Renders the game screen (the current state of the game), including menus, background, keyboard, help,
+buttons, etc.
+
+Also handles button presses and clicks.
 */
 int HQView::renderGame()
 {

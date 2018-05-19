@@ -8,22 +8,21 @@ class HQView;
 class HQController
 {
 private:
-	HQGame * model;
-	HQView * view;
+	HQGame * model; // The game model.
+	HQView * view; // The SFML view. What the user sees/interacts with.
 public:
 	HQController(HQGame * model, HQView * view);
 	~HQController();
 
 	// Model -> View methods.
-	std::string getWord();
-	size_t getWordLength();
-	std::set<char> getHits();
-	std::set<char> getMisses();
+	std::string getWord(); // Get word from model.
+	size_t getWordLength(); // Get word length from model.
+	std::set<char> getHits(); // Get # of hits from model.
+	std::set<char> getMisses(); // Get # of misses from model.
 
 	// View -> Model methods
-	void newGame();
-	void guess(char);
-	void chooseForMe();
-	void setWord(std::string);
+	void guess(char); // Guess with a char from the view.
+	void chooseForMe(); // Command from the view to choose a random word.
+	void setWord(std::string); // Command from the view to set a specific word.
 };
 
