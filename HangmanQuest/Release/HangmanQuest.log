@@ -1,0 +1,11 @@
+﻿  HQApplication.cpp
+  HQController.cpp
+  HQGame.cpp
+  HQView.cpp
+f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(123): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(150): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(412): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating code
+  All 588 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  HangmanQuest.vcxproj -> F:\Development\repos\HangmanQuest\Release\HangmanQuest.exe
