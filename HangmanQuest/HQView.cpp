@@ -106,7 +106,7 @@ int HQView::update()
 		game_state = LOSE;
 	}
 
-	if (hits.size() == controller->getWordLength())
+	if (hits.size() == controller->getNumUnique())
 	{
 		// you win.
 		game_state = WIN;
@@ -117,7 +117,7 @@ int HQView::update()
 	for (char letter : misses)
 	{
 		// Render misses on keyboard.
-		int i = static_cast<int>(letter);
+		int i = static_cast<int>(toupper(letter));
 		sf::Text missed_letter("X", font);
 		missed_letter.setFillColor(sf::Color::Red);
 		missed_letter.setPosition(alpha_buttons[i-65].left, alpha_buttons[i-65].top);

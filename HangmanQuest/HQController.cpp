@@ -21,6 +21,11 @@ size_t HQController::getWordLength()
 	return model->getWordLength();
 }
 
+size_t HQController::getNumUnique()
+{
+	return model->getNumUnique();
+}
+
 std::set<char> HQController::getHits()
 {
 	return model->getHits();

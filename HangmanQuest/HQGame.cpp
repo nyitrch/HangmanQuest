@@ -106,6 +106,11 @@ size_t HQGame::getWordLength() const
 	return word.size();
 }
 
+size_t HQGame::getNumUnique() const
+{
+	return letters.size();
+}
+
 std::string HQGame::getWord() const
 {
 	return word;

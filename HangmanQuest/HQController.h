@@ -17,6 +17,7 @@ public:
 	// Model -> View methods.
 	std::string getWord(); // Get word from model.
 	size_t getWordLength(); // Get word length from model.
+	size_t getNumUnique(); // Get number of unique letters in word from model.
 	std::set<char> getHits(); // Get # of hits from model.
 	std::set<char> getMisses(); // Get # of misses from model.
 

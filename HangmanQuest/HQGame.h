@@ -22,7 +22,8 @@ public:
 	void getRandomWord(); // Fetches new word from word database.
 	void guess(char); // Guess that a letter is in a word.
 
-	size_t getWordLength() const; // Return number of unique letters in the word.
+	size_t getWordLength() const; // Return number of letters in the word.
+	size_t getNumUnique() const; // Return number of unique letters in the word.
 	std::string getWord() const; // Return word.
 	void setWord(std::string); // Initializes gamestate with a word from the user.
 
