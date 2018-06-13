@@ -1,5 +1,4 @@
 #include "HQGame.h"
-#include <vector>
 #include <cctype>
 #include <algorithm>
 #include <iostream>
@@ -17,84 +16,94 @@ HQGame::~HQGame()
 }
 
 /*
-Set a random word from the 3of6game word list as the word to be guessed.
+Load the wordlist into a vector from the file located at wordlist_filename.
 */
-void HQGame::fetchNewWord()
+void HQGame::loadWordlist()
 {
-	std::ifstream wordlist("../3of6game.txt");
-	std::vector<std::string> words;
+	// Empty the old wordlist.
+	wordlist.clear();
 
-	if (wordlist.is_open())
+	std::ifstream istream(wordlist_filename);
+
+	if (istream.is_open())
 	{
 		std::string line;
 
-		while (std::getline(wordlist, line)) 
+		while (std::getline(istream, line))
 		{
 			// Remove non-alphabetical characters.
-			int i = 0;
+			int i = 0; // index of current character in line.
 			for (char letter : line)
 			{
-				if (!std::isalpha(letter))
-				{
-					line.erase(i);
-				}
-				++i;
+				if (!std::isalpha(letter)) { line.erase(i); }
 			}
-			// Add fixed word to words.
-			words.push_back(line);
-		}
+			++i;
+
+			/*
+			Convert to lowercase. Taken from https://stackoverflow.com/questions/23418390/how-to-convert-a-c-string-to-uppercase on May 18, 2018.
+			*/
+			std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+
+			// Add lowercase, alphabetical only word to wordlist.
+			wordlist.push_back(line);
+		}		
 	}
 
-	wordlist.close();
-
-	// Choose a random word.
-	std::srand(static_cast<unsigned int>(time(NULL)));
-	std::random_shuffle(words.begin(), words.end());
-	
-	word = words.front();
-
-	/*
-	Convert to uppercase. Taken from https://stackoverflow.com/questions/23418390/how-to-convert-a-c-string-to-uppercase on May 18, 2018.
-	*/
-	std::transform(word.begin(), word.end(), word.begin(), ::toupper);
-
-	setWord(word);
+	istream.close();
 }
 
 /*
-Guesses if a letter is in the word.
-
-Returns:
-  0 = IN : Letter is in word.
-  1 = NOT_IN : Letter is not in word.
-  2 = INVALID : Letter has already been guessed.
+Set a random word from the 3of6game word list as the word to be guessed.
 */
-int HQGame::guess(char letter)
+void HQGame::getRandomWord()
 {
-	// Check if the letter has been guessed already.
-	if (misses.count(letter) > 0)
+	if (wordlist.empty())
 	{
-		return 2;
+		loadWordlist();
 	}
-	if (hits.count(letter) > 0)
+
+	// Choose a random word.
+	std::srand(static_cast<unsigned int>(time(NULL)));
+	std::random_shuffle(wordlist.begin(), wordlist.end());
+	setWord(wordlist.front());
+}
+
+/*
+Guesses if a letter is in the word and adjusts hits and misses accordingly.
+*/
+void HQGame::guess(char letter)
+{
+	// Ensure guess is in lowercase.
+	letter = tolower(letter);
+
+	// Reject non-alphabetical characters.
+	if (!std::isalpha(letter))
 	{
-		return 2;
+		return; // Not valid guess.
+		// TODO: should error or do something more substantial here, but functionally its fine
+		// to do nothing when the guess is not valid as it is also not a correct guess.
+	}
+
+	// Check if the letter has been guessed already.
+	if (misses.count(letter) > 0 || hits.count(letter) > 0)
+	{
+		return; // Letter has already been guessed.
 	}
 
 	// Check if the letter is in the word.
 	if (letters.count(letter) > 0)
 	{
-		hits.insert(letter);
-		return 0;
+		hits.insert(letter); // Correct guess.
+		return;
 	} else {
-		misses.insert(letter);
-		return 1;
+		misses.insert(letter); // Incorrect guess.
+		return;
 	}
 }
 
 size_t HQGame::getWordLength() const
 {
-	return letters.size();
+	return word.size();
 }
 
 std::string HQGame::getWord() const
@@ -108,6 +117,11 @@ Initializes the gamestate with a word.
 void HQGame::setWord(std::string new_word)
 {
 	word = new_word;
+
+	/*
+	Convert to lowercase. Taken from https://stackoverflow.com/questions/23418390/how-to-convert-a-c-string-to-uppercase on May 18, 2018.
+	*/
+	std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
 	// Reset letters, misses, and hits.
 	letters.clear();
@@ -130,3 +144,15 @@ std::set<char> HQGame::getHits()
 {
 	return hits;
 }
+
+std::string HQGame::getWordlistFile()
+{
+	return wordlist_filename;
+}
+
+void HQGame::setWordlistFile(std::string filename)
+{
+	wordlist_filename = filename;
+}
+
+

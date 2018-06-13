@@ -41,7 +41,7 @@ void HQController::guess(char letter)
 void HQController::chooseForMe()
 {
 	// Have model choose a word.
-	model->fetchNewWord();
+	model->getRandomWord();
 	view->update();
 }
 

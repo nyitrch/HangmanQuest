@@ -31,6 +31,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Overlays", "Overlays", "{CE
 		Overlays\win.png = Overlays\win.png
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wordlists", "wordlists", "{D74A5988-8322-4F4F-976C-5CAFBCE10CB9}"
+	ProjectSection(SolutionItems) = preProject
+		wordlists\2of12.txt = wordlists\2of12.txt
+		wordlists\2of12inf.txt = wordlists\2of12inf.txt
+		wordlists\2of4brif.txt = wordlists\2of4brif.txt
+		wordlists\3esl.txt = wordlists\3esl.txt
+		wordlists\3of6all.txt = wordlists\3of6all.txt
+		wordlists\3of6game.txt = wordlists\3of6game.txt
+		wordlists\5d+2a.txt = wordlists\5d+2a.txt
+		wordlists\6of12.txt = wordlists\6of12.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +73,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CED57AF0-21B5-4387-8071-7AE98AD6659B} = {CF7A0842-5A77-42C3-925C-46B515333B28}
+		{D74A5988-8322-4F4F-976C-5CAFBCE10CB9} = {CF7A0842-5A77-42C3-925C-46B515333B28}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BAA1A5B-9020-4AB8-9695-C40A72D85C92}

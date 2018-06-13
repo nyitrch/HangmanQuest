@@ -29,32 +29,49 @@ namespace HangmanQuestTests
 			game.setWord("hello");
 
 			// Test guessing.
-			int result = game.guess('a');
-			Assert::AreEqual(result, 1); // 1 = not in word.
-			result = game.guess('l');
-			Assert::AreEqual(result, 0); // 0 = in word.
-			result = game.guess('l');
-			Assert::AreEqual(result, 2); // 2 = already guessed.
+		
+			game.guess('a');
+			std::set<char> hits = game.getHits();
+			std::set<char> misses = game.getMisses();
+			Assert::AreEqual(hits.count('a'), (size_t)0); // a not in hits.
+			Assert::AreEqual(misses.count('a'), (size_t)1); // a in misses.
 
-			result = game.guess('?');
-			Assert::AreEqual(result, 1); // 1 = not in word.
-			result = game.guess(' ');
-			Assert::AreEqual(result, 1); // 1 = not in word.
+			game.guess('l');
+			hits = game.getHits();
+			misses = game.getMisses();
+			Assert::AreEqual(hits.count('l'), (size_t)1); // l in hits.
+			Assert::AreEqual(misses.count('l'), (size_t)0); // l not in misses.
+
+			// Reguessing same letter should not change counts.
+			game.guess('l');
+			hits = game.getHits();
+			misses = game.getMisses();
+			Assert::AreEqual(hits.count('l'), (size_t)1); // l in hits.
+			Assert::AreEqual(misses.count('l'), (size_t)0); // l not in misses.
+
+			game.guess('?');
+			hits = game.getHits();
+			misses = game.getMisses();
+			Assert::AreEqual(hits.count('?'), (size_t)0); // ? not in hits.
+			Assert::AreEqual(misses.count('?'), (size_t)0); // ? not in misses.
+
+			game.guess(' ');
+			hits = game.getHits();
+			misses = game.getMisses();
+			Assert::AreEqual(hits.count(' '), (size_t)0); // ' ' not in hits.
+			Assert::AreEqual(misses.count(' '), (size_t)0); // ' ' not in misses.
 		}
 
 		TEST_METHOD(TestFetchWord)
 		{
 			HQGame game;
 
-			// Fetch at same time, words are equal.
-			game.fetchNewWord();
+			// Fetch two words, should be different.
+			game.getRandomWord();
 			std::string test_string1 = game.getWord();
-			game.fetchNewWord();
+			game.getRandomWord();
 			std::string test_string2 = game.getWord();
-			Assert::AreEqual(test_string1, test_string2);
-
-			// Fetched at different times, words should be different.
-			
+			Assert::AreNotEqual(test_string1, test_string2);
 		}
 
 	};
