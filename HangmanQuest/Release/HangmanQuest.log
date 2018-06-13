@@ -6,8 +6,8 @@ f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(123): warning C4244: '
 f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(150): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 f:\development\repos\hangmanquest\hangmanquest\hqview.cpp(412): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating code
-  4 of 592 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    9 functions had inline decision re-evaluated but remain unchanged
+  10 of 592 functions ( 1.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   HangmanQuest.vcxproj -> F:\Development\repos\HangmanQuest\Release\HangmanQuest.exe
