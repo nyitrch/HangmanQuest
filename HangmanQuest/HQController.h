@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <set>
+#include "GameState.h"
 
 class HQGame;
 class HQView;
@@ -20,7 +21,7 @@ public:
 	size_t getNumUnique(); // Get number of unique letters in word from model.
 	std::set<char> getHits(); // Get # of hits from model.
 	std::set<char> getMisses(); // Get # of misses from model.
-	int getGameState(); // Get the current game state from the model.
+	GameState getGameState(); // Get the current game state from the model.
 
 	// View -> Model methods
 	void guess(char); // Guess with a char from the view.

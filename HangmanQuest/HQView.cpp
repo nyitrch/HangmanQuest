@@ -6,7 +6,7 @@
 
 HQView::HQView()
 {
-	game_state = MAIN_MENU;
+	view_state = MAIN_MENU;
 	initialize();
 }
 
@@ -99,18 +99,18 @@ int HQView::update()
 	std::string word = controller->getWord();
 	std::set<char> hits = controller->getHits();
 	std::set<char> misses = controller->getMisses();
-	int game_state = controller->getGameState();
+	GameState game_state = controller->getGameState();
 
-	if (misses.size() == 6)
+	if (game_state == GameState::LOSE)
 	{
 		// you lose.
-		game_state = LOSE;
+		view_state = LOSE;
 	}
 
-	if (hits.size() == controller->getNumUnique())
+	if (game_state == GameState::WIN)
 	{
 		// you win.
-		game_state = WIN;
+		view_state = WIN;
 	}
 
 	// Render misses on keyboard.
@@ -283,7 +283,7 @@ int HQView::renderGame()
 				window.close();
 
 			// Event switch depending on game state.
-			switch (game_state)
+			switch (view_state)
 			{
 			case MAIN_MENU:
 				initialize();
@@ -293,12 +293,12 @@ int HQView::renderGame()
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (enter_word_button.contains(position)) // user will enter word
 					{
-						game_state = ENTER_WORD;
+						view_state = ENTER_WORD;
 						break;
 					}
 					if (choose_for_me_button.contains(position)) // choose word for user.
 					{
-						game_state = GAME;
+						view_state = GAME;
 						// tell controller to choose word.
 						controller->chooseForMe();
 						break;
@@ -337,7 +337,7 @@ int HQView::renderGame()
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (confirm_button.contains(position)) // confirm entered word.
 					{
-						game_state = GAME;
+						view_state = GAME;
 
 						// send entered word to controller.
 						controller->setWord(input);
@@ -358,13 +358,13 @@ int HQView::renderGame()
 
 					if (back_button.contains(position)) // return to menu.
 					{
-						game_state = MAIN_MENU;
+						view_state = MAIN_MENU;
 						// tell controller to reset game.
 						break;
 					}
 					if (help_button.contains(position)) // display help
 					{
-						game_state = HELP;
+						view_state = HELP;
 						break;
 					}
 
@@ -384,7 +384,7 @@ int HQView::renderGame()
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (back_button.contains(position))
-						game_state = GAME;
+						view_state = GAME;
 				}
 				break;
 
@@ -394,7 +394,7 @@ int HQView::renderGame()
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (back_button.contains(position))
-						game_state = MAIN_MENU;
+						view_state = MAIN_MENU;
 				}
 				break;
 
@@ -417,7 +417,7 @@ int HQView::renderGame()
 				{
 					sf::Vector2i position = sf::Mouse::getPosition(window);
 					if (back_button.contains(position))
-						game_state = MAIN_MENU;
+						view_state = MAIN_MENU;
 				}
 				break;
 			}
@@ -427,7 +427,7 @@ int HQView::renderGame()
 		window.draw(background);
 
 		// Render switch depending on game state.
-		switch (game_state)
+		switch (view_state)
 		{
 		case MAIN_MENU:
 			window.draw(title);

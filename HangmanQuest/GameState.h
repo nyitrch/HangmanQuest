@@ -1,3 +1,4 @@
+#pragma once
 /*
 Represents the current state of the game (HQGame).
 

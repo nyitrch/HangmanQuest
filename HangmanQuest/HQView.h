@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "GameState.h"
 
 class HQController;
 
@@ -23,7 +24,7 @@ private:
 	sf::Font font; // Standard font for the game.
 	sf::Text guessed_word; // Text object that represents the word to guess.
 	std::vector<sf::Text> missed_letters; // X marks that appear on wrong guesses.
-	ViewState game_state; // Current game state.
+	ViewState view_state; // Current game state.
 
 public:
 	HQView();

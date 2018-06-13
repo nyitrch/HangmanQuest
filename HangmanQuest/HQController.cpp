@@ -36,7 +36,7 @@ std::set<char> HQController::getMisses()
 	return model->getMisses();
 }
 
-int HQController::getGameState()
+GameState HQController::getGameState()
 {
 	return model->getGameState();
 }
