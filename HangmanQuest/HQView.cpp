@@ -99,6 +99,7 @@ int HQView::update()
 	std::string word = controller->getWord();
 	std::set<char> hits = controller->getHits();
 	std::set<char> misses = controller->getMisses();
+	int game_state = controller->getGameState();
 
 	if (misses.size() == 6)
 	{

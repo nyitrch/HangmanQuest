@@ -36,6 +36,11 @@ std::set<char> HQController::getMisses()
 	return model->getMisses();
 }
 
+int HQController::getGameState()
+{
+	return model->getGameState();
+}
+
 void HQController::guess(char letter)
 {
 	// Send guess to model.

@@ -2,25 +2,25 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "GameState.h"
 
 class HQGame
 {
 private:
-
-	static const int PLAY = 0; // If game_state = PLAY, game is in play.
-	static const int LOSE = 1; // If game_state = LOSE, game has been lost.
-	static const int WIN = 2;  // If game_state = WIN, game has been won.
-
+	
+	// Variables that represent the word and guesses.
 	std::string word; // The word to be guessed in Hangman.
 	std::set<char> letters; // A set of all the letters in the word to be guessed.
 	std::set<char> misses; // A set of guessed letters that were incorrect.
 	std::set<char> hits; // A set of guessed letters that were correct.
 
+	// Wordlist filename and vector.
 	std::vector<std::string> wordlist; // List of words from which a single word for the Hangman game is chosen.
 	std::string wordlist_filename = "../wordlists/3of6game.txt"; // Filename of wordlist txt file.
 
+	// Game property variables.
 	const int guess_limit = 6; // Number of total guesses allowed before a loss is triggered.
-	int game_state = 0; // Represents the current state of the game. 
+	GameState game_state = GameState::PLAY; // Current state of the game.
 
 public:
 	HQGame();
@@ -41,5 +41,8 @@ public:
 
 	std::string getWordlistFile(); // Returns the filename of the wordlist.
 	void setWordlistFile(std::string filename); // Set the filename of the wordlist.
+
+	GameState getGameState(); // Returns game_state.
+	void setGameState(GameState state); // Changes game_state.
 };
 

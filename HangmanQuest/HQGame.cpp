@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
+#include <assert.h>
 
 
 
@@ -67,7 +68,7 @@ void HQGame::getRandomWord()
 	std::random_shuffle(wordlist.begin(), wordlist.end());
 	setWord(wordlist.front());
 
-	game_state = PLAY; // Reset game state.
+	game_state = GameState::PLAY; // Reset game state.
 }
 
 /*
@@ -96,12 +97,12 @@ void HQGame::guess(char letter)
 	if (letters.count(letter) > 0)
 	{
 		hits.insert(letter); // Correct guess.
-		if (hits.size() == letters.size()) { game_state = WIN; } // Check if the game has been won.
+		if (hits.size() == letters.size()) { game_state = GameState::WIN; } // Check if the game has been won.
 		return;
 
 	} else {
 		misses.insert(letter); // Incorrect guess.
-		if (misses.size() == guess_limit) { game_state = LOSE; } // Check if the game has been lost.
+		if (misses.size() == guess_limit) { game_state = GameState::LOSE; } // Check if the game has been lost.
 		return;
 	}
 }
@@ -144,7 +145,7 @@ void HQGame::setWord(std::string new_word)
 		letters.insert(letter);
 	}
 
-	game_state = PLAY; // Reset game state.
+	game_state = GameState::PLAY; // Reset game state.
 }
 
 std::set<char> HQGame::getMisses()
@@ -165,6 +166,20 @@ std::string HQGame::getWordlistFile()
 void HQGame::setWordlistFile(std::string filename)
 {
 	wordlist_filename = filename;
+}
+
+GameState HQGame::getGameState()
+{
+	return game_state;
+}
+
+void HQGame::setGameState(GameState state)
+{
+	assert("Game state must be PLAY, LOSE, or WIN.",
+		state == GameState::PLAY || 
+		state == GameState::LOSE || 
+		state == GameState::WIN);
+	game_state = state;
 }
 
 

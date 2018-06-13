@@ -9,7 +9,7 @@ class HQView
 private:
 	HQController * controller; // Communicates between game model.
 
-	enum GameState // States used to help with detecting button presses, and what should be displayed.
+	enum ViewState // States used to help with detecting button presses, and what should be displayed.
 	{
 		MAIN_MENU,
 		ENTER_WORD,
@@ -23,7 +23,7 @@ private:
 	sf::Font font; // Standard font for the game.
 	sf::Text guessed_word; // Text object that represents the word to guess.
 	std::vector<sf::Text> missed_letters; // X marks that appear on wrong guesses.
-	GameState game_state; // Current game state.
+	ViewState game_state; // Current game state.
 
 public:
 	HQView();
